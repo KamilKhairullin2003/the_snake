@@ -48,7 +48,8 @@ KEY_DIRECTION_MAPPING = {
 class GameObject:
     """Родительский класс для игровых объектов."""
 
-    def __init__(self, position: Tuple[int, int], body_color: Tuple[int, int, int]):
+    def __init__(self, position: Tuple[int, int], body_color: Tuple[int, int,
+                 int]):
         """
         Инициализирует основные атрибуты игрового объекта.
 
@@ -58,7 +59,8 @@ class GameObject:
         self.position = position
         self.body_color = body_color
 
-    def draw_cell(self, surface: pygame.Surface, position: Tuple[int, int], color: Tuple[int, int, int] = None):
+    def draw_cell(self, surface: pygame.Surface, position: Tuple[int, int],
+                  color: Tuple[int, int, int] = None):
         """
         Отрисовка ячейки.
 
@@ -89,7 +91,8 @@ class Apple(GameObject):
         """
         Инициализирует яблоко с красным цветом и случайной позицией.
 
-        Параметр occupied_positions список занятых позиций (например, позиции змейки).
+        Параметр occupied_positions список занятых позиций
+        (например, позиции змейки).
         """
         super().__init__(position=(0, 0), body_color=APPLE_COLOR)
         self.randomize_position(occupied_positions or [])
@@ -122,15 +125,15 @@ class Snake(GameObject):
 
     def __init__(self):
         """
-        Инициализирует змейку с начальной длиной, направлением и позицией.
+        Инициализирует змейку с начальной длиной,
+        
+        направлением и позицией.
         """
         super().__init__(position=INITIAL_POSITION, body_color=SNAKE_COLOR)
         self.reset()
 
     def reset(self):
-        """
-        Сбрасывает змейку в начальное состояние.
-        """
+        """Сбрасывает змейку в начальное состояние."""
         self.length = 1
         self.positions = [self.position]
         self.direction = RIGHT
@@ -157,7 +160,11 @@ class Snake(GameObject):
 
     def move(self):
         """
-        Обновляет позицию змейки, добавляя новую голову и удаляя хвост, если длина не увеличилась.
+        Обновляет позицию змейки,
+        
+        добавляя новую голову и удаляя хвост,
+
+        если длина не увеличилась.
         """
         current_head = self.get_head_position()
         new_head = (
