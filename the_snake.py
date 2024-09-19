@@ -126,7 +126,6 @@ class Snake(GameObject):
     def __init__(self):
         """
         Инициализирует змейку с начальной длиной,
-        
         направлением и позицией.
         """
         super().__init__(position=INITIAL_POSITION, body_color=SNAKE_COLOR)
@@ -160,10 +159,8 @@ class Snake(GameObject):
 
     def move(self):
         """
-        Обновляет позицию змейки,
-        
+        Обновляет позицию змейки,        
         добавляя новую голову и удаляя хвост,
-
         если длина не увеличилась.
         """
         current_head = self.get_head_position()
