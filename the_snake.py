@@ -49,7 +49,7 @@ class GameObject:
     """Родительский класс для игровых объектов."""
 
     def __init__(self, position: Tuple[int, int] = None,
-                 body_color: Tuple[int, int,int] = None):
+                 body_color: Tuple[int, int, int] = None):
         """
         Инициализирует основные атрибуты игрового объекта.
 
