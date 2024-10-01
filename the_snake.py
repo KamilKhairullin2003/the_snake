@@ -104,7 +104,8 @@ class Apple(GameObject):
         Параметр occupied_positions cписок занятых позиций.
         """
         while True:
-            self.position = (random.randint(0, GRID_WIDTH - 1) * GRID_SIZE, random.randint(0, GRID_HEIGHT - 1) * GRID_SIZE)
+            self.position = (random.randint(0, GRID_WIDTH - 1) * GRID_SIZE,
+                             random.randint(0, GRID_HEIGHT - 1) * GRID_SIZE)
             if self.position not in occupied_positions:
                 break
 
@@ -187,13 +188,15 @@ def handle_keys(snake: Snake):
     Параметр snake - объект змейки.
     """
     for event in pg.event.get():
-        if event.type == pg.QUIT or (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
+        if event.type == pg.QUIT or
+         (event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE):
             pg.quit()
             raise SystemExit
         elif event.type == pg.KEYDOWN:
             if event.key in KEY_DIRECTION_MAPPING:
                 new_direction = KEY_DIRECTION_MAPPING[event.key]
                 snake.update_direction(new_direction)
+
 
 def main():
     """Основной игровой цикл."""
