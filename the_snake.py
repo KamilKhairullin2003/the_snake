@@ -1,7 +1,7 @@
 import random
+from typing import List, Tuple
 
 import pygame as pg
-from typing import List, Tuple
 
 # Константы для размеров поля и сетки
 SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
