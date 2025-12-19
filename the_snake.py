@@ -1,6 +1,7 @@
-import pygame as pg
 import random
 from typing import Tuple, List
+
+import pygame as pg
 
 # Константы для размеров поля и сетки
 SCREEN_WIDTH, SCREEN_HEIGHT = 640, 480
@@ -81,7 +82,7 @@ class GameObject:
 
         Параметр surface поверхность Pygame для отрисовки.
         """
-        raise NotImplementedError("Метод переопределяется в дочерних классах.")
+        raise NotImplementedError('Метод переопределяется в дочерних классах.')
 
 
 class Apple(GameObject):
