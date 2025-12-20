@@ -1,4 +1,5 @@
 import random
+import sys
 from typing import List, Tuple
 
 import pygame as pg
@@ -65,37 +66,51 @@ class GameObject:
         """
         Отрисовка ячейки.
 
-        Параметр surface поверхность P  ygame для отрисовки.
+        Параметр surface поверхность Pygame для отрисовки.
         Параметр position позиция ячейки.
         Параметр color цвет ячейки. Если None, используется цвет объекта.
         """
         rect = pg.Rect(position, (GRID_SIZE, GRID_SIZE))
-        if color is None:
-            color = self.body_color
+        color = color or self.body_color
         pg.draw.rect(screen, color, rect)
         pg.draw.rect(screen, BORDER_COLOR, rect, 1)
 
     def draw(self):
         """
         Абстрактный метод для отрисовки объекта.
-        Должен быть переопределён в дочерних классах.
 
-        Параметр surface поверхность Pygame для отрисовки.
+        Этот метод должен быть переопределён в дочерних классах.
+        Каждый дочерний класс должен реализовать свою собственнную логику.
         """
-        raise NotImplementedError('Метод переопределяется в дочерних классах.')
+        raise NotImplementedError(
+            f'Метод draw() должен быть переопределен в классе '
+            f'{self.__class__.__name__}.'
+        )
 
 
 class Apple(GameObject):
     """Класс, представляющий яблоко в игре."""
 
-    def __init__(self, occupied_positions: List[Tuple[int, int]] = None):
+    DEFAULT_POSITION = (0, 0)
+
+    def __init__(self,
+                 occupied_positions: List[Tuple[int, int]] = None,
+                 position: Tuple[int, int] = None,
+                 body_color: Tuple[int, int, int] = None):
         """
         Инициализирует яблоко с красным цветом и случайной позицией.
 
         Параметр occupied_positions список занятых позиций
         (например, позиции змейки).
+        Параметр position позиция яблока,
+        если не указана используется случайная позиция.
+        Параметр body_color цвет яблока,
+        если не указан, используется APPLE_COLOR.
         """
-        super().__init__(position=(0, 0), body_color=APPLE_COLOR)
+        super().__init__(
+            position=position or self.DEFAULT_POSITION,
+            body_color=body_color or APPLE_COLOR
+        )
         self.randomize_position(occupied_positions or [])
 
     def randomize_position(self, occupied_positions: List[Tuple[int, int]]):
@@ -122,12 +137,21 @@ class Apple(GameObject):
 class Snake(GameObject):
     """Класс, представляющий змейку в игре."""
 
-    def __init__(self):
+    def __init__(self,
+                 position: Tuple[int, int] = None,
+                 body_color: Tuple[int, int, int] = None):
         """
-        Инициализирует змейку с начальной длиной,
-        направлением и позицией.
+        Инициализирует змейку с начальной длиной, направлением и позицией.
+
+        Параметр position начальная позиция змейки,
+        по умолчанию используется CENTER_POSITION.
+        Параметр body_color цвет змейки,
+        по умолчанию используется SNAKE_COLOR.
         """
-        super().__init__(position=CENTER_POSITION, body_color=SNAKE_COLOR)
+        super().__init__(
+            position=position or CENTER_POSITION,
+            body_color=body_color or SNAKE_COLOR
+        )
         self.reset()
 
     def reset(self):
@@ -193,7 +217,7 @@ def handle_keys(snake: Snake):
             event.type == pg.KEYDOWN and event.key == pg.K_ESCAPE
         ):
             pg.quit()
-            raise SystemExit
+            sys.exit()
         elif event.type == pg.KEYDOWN:
             if event.key in KEY_DIRECTION_MAPPING:
                 new_direction = KEY_DIRECTION_MAPPING[event.key]
@@ -205,8 +229,7 @@ def main():
     snake = Snake()
     apple = Apple(occupied_positions=snake.positions)
 
-    running = True
-    while running:
+    while True:
         clock.tick(SPEED)
         handle_keys(snake)
         snake.move()
@@ -217,7 +240,7 @@ def main():
             apple.randomize_position(occupied_positions=snake.positions)
 
         # Проверка столкновения с собой
-        elif snake.get_head_position() in snake.positions[1:]:
+        elif snake.get_head_position() in snake.positions[snake.length:]:
             snake.reset()
             apple.randomize_position(occupied_positions=snake.positions)
 
