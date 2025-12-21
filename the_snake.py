@@ -19,6 +19,9 @@ RIGHT = (1, 0)
 # Начальная позиция объекта
 CENTER_POSITION = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
 
+# Базовая позиция яблока
+DEFAULT_POSITION = (0, 0)
+
 # Цвета
 BOARD_BACKGROUND_COLOR = (0, 0, 0)
 BORDER_COLOR = (93, 216, 228)
@@ -83,7 +86,7 @@ class GameObject:
         Каждый дочерний класс должен реализовать свою собственнную логику.
         """
         raise NotImplementedError(
-            f'Метод draw() должен быть переопределен в классе '
+            'Метод draw() должен быть переопределен в классе '
             f'{self.__class__.__name__}.'
         )
 
@@ -91,12 +94,10 @@ class GameObject:
 class Apple(GameObject):
     """Класс, представляющий яблоко в игре."""
 
-    DEFAULT_POSITION = (0, 0)
-
     def __init__(self,
                  occupied_positions: List[Tuple[int, int]] = None,
-                 position: Tuple[int, int] = None,
-                 body_color: Tuple[int, int, int] = None):
+                 position: Tuple[int, int] = DEFAULT_POSITION,
+                 body_color: Tuple[int, int, int] = APPLE_COLOR):
         """
         Инициализирует яблоко с красным цветом и случайной позицией.
 
@@ -107,11 +108,9 @@ class Apple(GameObject):
         Параметр body_color цвет яблока,
         если не указан, используется APPLE_COLOR.
         """
-        super().__init__(
-            position=position or self.DEFAULT_POSITION,
-            body_color=body_color or APPLE_COLOR
-        )
-        self.randomize_position(occupied_positions or [])
+        super().__init__(position=position, body_color=body_color)
+        if position == DEFAULT_POSITION:
+            self.randomize_position(occupied_positions or [])
 
     def randomize_position(self, occupied_positions: List[Tuple[int, int]]):
         """
@@ -138,8 +137,8 @@ class Snake(GameObject):
     """Класс, представляющий змейку в игре."""
 
     def __init__(self,
-                 position: Tuple[int, int] = None,
-                 body_color: Tuple[int, int, int] = None):
+                 position: Tuple[int, int] = CENTER_POSITION,
+                 body_color: Tuple[int, int, int] = SNAKE_COLOR):
         """
         Инициализирует змейку с начальной длиной, направлением и позицией.
 
@@ -148,10 +147,7 @@ class Snake(GameObject):
         Параметр body_color цвет змейки,
         по умолчанию используется SNAKE_COLOR.
         """
-        super().__init__(
-            position=position or CENTER_POSITION,
-            body_color=body_color or SNAKE_COLOR
-        )
+        super().__init__(position=position, body_color=body_color)
         self.reset()
 
     def reset(self):
@@ -240,7 +236,7 @@ def main():
             apple.randomize_position(occupied_positions=snake.positions)
 
         # Проверка столкновения с собой
-        elif snake.get_head_position() in snake.positions[snake.length:]:
+        elif snake.get_head_position() in snake.positions[3:]:
             snake.reset()
             apple.randomize_position(occupied_positions=snake.positions)
 
